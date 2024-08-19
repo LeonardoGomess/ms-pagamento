@@ -29,7 +29,7 @@ public class PagamentoService {
     @Transactional(readOnly = true)
     public  PagamentoDTO findById(Long id){
         Pagamento entity = repository.findById(id).orElseThrow(
-                () -> new EntityNotFoundException("Recurso nao encontrado")
+                () -> new ResourceNotFoundException("Recurso nao encontrado! id: " + id)
         );
         return new PagamentoDTO(entity);
     }
@@ -45,12 +45,24 @@ public class PagamentoService {
     @Transactional
     public  void  delete(Long id){
         if (!repository.existsById(id)){
-            throw  new EntityNotFoundException("Recurso nao encontrado");
+            throw  new ResourceNotFoundException("Recurso nao encontrado! Id:" + id);
         }
         try {
             repository.deleteById(id);
         }catch (EntityNotFoundException e){
-            throw new EntityNotFoundException("Recurso nao encontrado");
+            throw new ResourceNotFoundException("Recurso nao encontrado! Id:" + id);
+        }
+    }
+
+    @Transactional
+    public PagamentoDTO update(Long id,PagamentoDTO dto){
+        try {
+            Pagamento entity = repository.getReferenceById(id);
+            copyDtoToEntity(dto,entity);
+            entity = repository.save(entity);
+            return  new PagamentoDTO(entity);
+        }catch (EntityNotFoundException e){
+            throw  new ResourceNotFoundException("Recurso nao encontrado! id: " + id);
         }
     }
 

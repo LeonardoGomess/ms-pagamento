@@ -4,6 +4,7 @@ package com.github.leonardogomess.controller;
 import com.github.leonardogomess.dto.PagamentoDTO;
 import com.github.leonardogomess.service.PagamentoService;
 import jakarta.validation.Valid;
+import jakarta.validation.constraints.NotNull;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -46,5 +47,11 @@ public class PagamentoController {
     public ResponseEntity<Void> delete(@PathVariable Long id){
         service.delete(id);
         return ResponseEntity.noContent().build();
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<PagamentoDTO> update (@PathVariable @NotNull Long id , @RequestBody @Valid PagamentoDTO dto){
+        dto = service.update(id,dto);
+        return ResponseEntity.ok(dto);
     }
 }

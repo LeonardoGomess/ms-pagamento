@@ -35,8 +35,10 @@ public class PagamentoDTO {
     @Enumerated(value = EnumType.STRING)
     private Status status;
     @NotNull(message = "Pedido ID é obrigatorio")
+    @Positive(message = "O ID pedido deve ser um valor positivo")
     private Long pedidoId;
     @NotNull(message = "Forma de pagamento ID é obrigatorio")
+    @Positive(message = "A forma de pagamento deve ser um numero positivo")
     private  Long formaDePagamentoId;
 
     public PagamentoDTO(Pagamento entity){
