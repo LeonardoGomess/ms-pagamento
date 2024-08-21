@@ -5,8 +5,10 @@ import com.github.leonardogomess.dto.PagamentoDTO;
 import com.github.leonardogomess.model.Pagamento;
 import com.github.leonardogomess.model.Status;
 import com.github.leonardogomess.repository.PagamentoRepository;
+import com.github.leonardogomess.service.exception.DataBaseException;
 import jakarta.persistence.EntityNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -49,8 +51,8 @@ public class PagamentoService {
         }
         try {
             repository.deleteById(id);
-        }catch (EntityNotFoundException e){
-            throw new ResourceNotFoundException("Recurso nao encontrado! Id:" + id);
+        }catch (DataIntegrityViolationException e){
+            throw new DataBaseException("Falha de integraidade referencial");
         }
     }
 
